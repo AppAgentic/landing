@@ -4,10 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>App Agentic</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230a0a0a'/><circle cx='16' cy='16' r='6' fill='none' stroke='%234fffff' stroke-width='1.5' opacity='0.9'/><circle cx='16' cy='16' r='2' fill='%234fffff'/></svg>">
+  <meta name="description" content="A new operating layer for the next generation of apps.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230a0a0c'/><circle cx='16' cy='16' r='6' fill='none' stroke='%2363dce3' stroke-width='1.5' opacity='0.9'/><circle cx='16' cy='16' r='2' fill='%2363dce3'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
-
     *, *::before, *::after {
       margin: 0;
       padding: 0;
@@ -15,335 +17,733 @@
     }
 
     :root {
-      --bg: #0a0a0a;
-      --surface: #111111;
-      --border: #1a1a1a;
-      --text: #e0e0e0;
-      --text-dim: #555555;
-      --accent: #4fffff;
-      --accent-dim: rgba(79, 255, 255, 0.08);
-      --glow: rgba(79, 255, 255, 0.15);
+      --bg:          #0a0a0c;
+      --bg-elev:     #111114;
+      --border:      rgba(255, 255, 255, 0.06);
+      --border-mid:  rgba(255, 255, 255, 0.12);
+      --text:        #e8e8ed;
+      --text-mid:    #8a8a95;
+      --text-dim:    #52525b;
+      --accent:      #63dce3;
+      --accent-soft: rgba(99, 220, 227, 0.10);
+      --accent-glow: rgba(99, 220, 227, 0.22);
+      --warn:        #f4c47a;
+
+      --ff-sans:  'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --ff-mono:  'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      --ff-serif: 'Instrument Serif', Georgia, serif;
+
+      --pad-x: clamp(1.5rem, 4vw, 3.5rem);
+      --pad-y: clamp(1.25rem, 3vh, 2rem);
     }
 
-    html {
-      font-size: 16px;
-    }
+    html { font-size: 16px; }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: var(--ff-sans);
       background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      min-height: 100dvh;
       overflow-x: hidden;
+      overflow-y: hidden;
       position: relative;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-feature-settings: "ss01", "cv11";
     }
 
-    /* Ambient background glow */
+    /* ── Grain overlay ──────────────────────────── */
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.18;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+
+    /* ── Vignette ───────────────────────────────── */
+    .vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background:
+        radial-gradient(ellipse at 70% 60%, transparent 40%, rgba(0,0,0,0.55) 100%),
+        radial-gradient(ellipse at 20% 30%, rgba(99, 220, 227, 0.04), transparent 60%);
+    }
+
+    /* ── Ambient orbs (slow drift) ──────────────── */
     .ambient {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       pointer-events: none;
       z-index: 0;
       overflow: hidden;
     }
 
-    .ambient-orb {
+    .orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(120px);
+      filter: blur(140px);
       opacity: 0;
-      animation: drift 20s ease-in-out infinite;
+      animation: drift 28s ease-in-out infinite;
+      will-change: transform, opacity;
     }
 
-    .ambient-orb:nth-child(1) {
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(79, 255, 255, 0.07), transparent 70%);
-      top: -200px;
-      left: -100px;
+    .orb--1 {
+      width: 620px; height: 620px;
+      background: radial-gradient(circle, rgba(99, 220, 227, 0.09), transparent 70%);
+      top: -180px; left: -140px;
       animation-delay: 0s;
     }
-
-    .ambient-orb:nth-child(2) {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(79, 200, 255, 0.05), transparent 70%);
-      bottom: -150px;
-      right: -100px;
-      animation-delay: -7s;
+    .orb--2 {
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, rgba(120, 190, 255, 0.04), transparent 70%);
+      bottom: -180px; right: 10%;
+      animation-delay: -9s;
     }
-
-    .ambient-orb:nth-child(3) {
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(120, 80, 255, 0.04), transparent 70%);
-      top: 40%;
-      left: 50%;
-      animation-delay: -14s;
+    .orb--3 {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(244, 196, 122, 0.03), transparent 70%);
+      top: 45%; right: -120px;
+      animation-delay: -17s;
     }
 
     @keyframes drift {
-      0%, 100% {
-        opacity: 0.4;
-        transform: translate(0, 0) scale(1);
-      }
-      25% {
-        opacity: 0.7;
-        transform: translate(30px, -20px) scale(1.05);
-      }
-      50% {
-        opacity: 0.5;
-        transform: translate(-20px, 30px) scale(0.95);
-      }
-      75% {
-        opacity: 0.8;
-        transform: translate(10px, 10px) scale(1.02);
-      }
+      0%, 100% { opacity: 0.55; transform: translate(0, 0) scale(1); }
+      33%      { opacity: 0.75; transform: translate(40px, -30px) scale(1.06); }
+      66%      { opacity: 0.45; transform: translate(-25px, 25px) scale(0.96); }
     }
 
-    /* Particle field */
+    /* ── Particles ──────────────────────────────── */
     .particles {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       pointer-events: none;
-      z-index: 0;
+      z-index: 2;
     }
 
     .particle {
       position: absolute;
-      width: 2px;
-      height: 2px;
       background: var(--accent);
       border-radius: 50%;
       opacity: 0;
       animation: float linear infinite;
+      will-change: transform, opacity;
     }
 
     @keyframes float {
-      0% {
-        opacity: 0;
-        transform: translateY(0) translateX(0);
-      }
-      10% {
-        opacity: 0.3;
-      }
-      90% {
-        opacity: 0.3;
-      }
-      100% {
-        opacity: 0;
-        transform: translateY(-100vh) translateX(20px);
-      }
+      0%   { opacity: 0;   transform: translateY(0) translateX(0); }
+      15%  { opacity: 0.35; }
+      85%  { opacity: 0.35; }
+      100% { opacity: 0; transform: translateY(-100vh) translateX(30px); }
     }
 
-    /* Content */
-    .content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 2rem;
-      max-width: 680px;
-      width: 100%;
+    /* ── Corner brackets (cinematic chrome) ─────── */
+    .corner {
+      position: fixed;
+      width: 28px;
+      height: 28px;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0;
+      animation: cornerIn 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s forwards;
+    }
+    .corner::before, .corner::after {
+      content: "";
+      position: absolute;
+      background: var(--border-mid);
+    }
+    .corner::before { width: 100%; height: 1px; }
+    .corner::after  { width: 1px;  height: 100%; }
+
+    .corner--tl { top: var(--pad-y);    left: var(--pad-x); }
+    .corner--tl::before { top: 0; left: 0; }
+    .corner--tl::after  { top: 0; left: 0; }
+
+    .corner--tr { top: var(--pad-y);    right: var(--pad-x); }
+    .corner--tr::before { top: 0; right: 0; }
+    .corner--tr::after  { top: 0; right: 0; }
+
+    .corner--bl { bottom: var(--pad-y); left: var(--pad-x); }
+    .corner--bl::before { bottom: 0; left: 0; }
+    .corner--bl::after  { bottom: 0; left: 0; }
+
+    .corner--br { bottom: var(--pad-y); right: var(--pad-x); }
+    .corner--br::before { bottom: 0; right: 0; }
+    .corner--br::after  { bottom: 0; right: 0; }
+
+    @keyframes cornerIn {
+      0%   { opacity: 0; transform: scale(0.7); }
+      100% { opacity: 1; transform: scale(1); }
     }
 
-    /* Brand */
+    /* ── Chrome (top & bottom bars) ─────────────── */
+    .chrome {
+      position: fixed;
+      left: 0; right: 0;
+      padding: calc(var(--pad-y) + 6px) calc(var(--pad-x) + 28px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 4;
+      pointer-events: none;
+    }
+    .chrome > * { pointer-events: auto; }
+    .chrome--top    { top: 0; }
+    .chrome--bottom { bottom: 0; }
+
+    /* ── Brand mark ─────────────────────────────── */
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 4rem;
+      gap: 0.65rem;
       opacity: 0;
-      animation: fadeIn 1.5s ease 0.3s forwards;
+      animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
     }
-
     .brand-mark {
-      width: 28px;
-      height: 28px;
-      position: relative;
+      width: 22px; height: 22px;
+      display: block;
     }
+    .brand-mark svg { width: 100%; height: 100%; }
+    .brand-mark .ring-outer { animation: ringSpin 18s linear infinite; transform-origin: center; transform-box: fill-box; }
+    .brand-mark .core        { animation: corePulse 3s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
 
-    .brand-mark svg {
-      width: 100%;
-      height: 100%;
+    @keyframes ringSpin   { to { transform: rotate(360deg); } }
+    @keyframes corePulse  {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50%      { opacity: 1;    transform: scale(1.15); }
     }
 
     .brand-name {
-      font-size: 0.85rem;
+      font-family: var(--ff-mono);
+      font-size: 0.72rem;
       font-weight: 500;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+    }
+
+    /* ── Status pill (top right) ────────────────── */
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.42rem 0.85rem 0.42rem 0.7rem;
+      border: 1px solid var(--border-mid);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      font-family: var(--ff-mono);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      opacity: 0;
+      animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.55s forwards;
+    }
+
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .status-dot::after {
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.4;
+      animation: ping 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+    }
+    @keyframes ping {
+      0%   { transform: scale(0.8); opacity: 0.4; }
+      80%, 100% { transform: scale(2.2); opacity: 0; }
+    }
+
+    /* ── Bottom chrome text ─────────────────────── */
+    .chrome-meta {
+      font-family: var(--ff-mono);
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--text-dim);
-    }
-
-    /* Hero */
-    .hero-text {
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
-      font-weight: 300;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      margin-bottom: 1.5rem;
       opacity: 0;
-      animation: fadeIn 1.5s ease 0.6s forwards;
-      position: relative;
+      animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 1.8s forwards;
     }
 
-    .hero-text .shimmer {
-      background: linear-gradient(
-        120deg,
-        var(--text) 0%,
-        var(--text) 40%,
-        var(--accent) 50%,
-        var(--text) 60%,
-        var(--text) 100%
-      );
+    /* ── Stage (main content — asymmetric) ──────── */
+    .stage {
+      position: relative;
+      z-index: 3;
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+      padding: 6rem calc(var(--pad-x) + 28px);
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    /* ── Hero block (left) ──────────────────────── */
+    .hero {
+      max-width: 620px;
+      padding-left: clamp(0rem, 4vw, 3rem);
+    }
+
+    .chapter {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.9rem;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s forwards;
+    }
+    .chapter-line {
+      width: 36px; height: 1px;
+      background: var(--border-mid);
+      position: relative;
+      overflow: hidden;
+    }
+    .chapter-line::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      animation: scan 4s ease-in-out infinite;
+    }
+    @keyframes scan {
+      0%, 100% { transform: translateX(-100%); }
+      50%      { transform: translateX(100%); }
+    }
+    .chapter-label {
+      font-family: var(--ff-mono);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+    }
+
+    .headline {
+      font-family: var(--ff-sans);
+      font-size: clamp(2.3rem, 5.2vw, 4.4rem);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -0.035em;
+      color: var(--text);
+      margin-bottom: 1.6rem;
+    }
+    .headline .line {
+      display: block;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: lineIn 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+    .headline .line--1 { animation-delay: 0.85s; }
+    .headline .line--2 { animation-delay: 1.0s;  }
+    .headline em {
+      font-family: var(--ff-serif);
+      font-style: italic;
+      font-weight: 400;
+      color: transparent;
+      background: linear-gradient(120deg,
+        var(--accent) 0%,
+        #b8f3f7 50%,
+        var(--accent) 100%);
       background-size: 200% 100%;
       -webkit-background-clip: text;
       background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shimmer 6s ease-in-out infinite;
+      animation: shimmer 7s ease-in-out infinite;
+      letter-spacing: -0.02em;
     }
 
+    @keyframes lineIn {
+      0%   { opacity: 0; transform: translateY(18px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
     @keyframes shimmer {
-      0%, 100% {
-        background-position: 200% center;
-      }
-      50% {
-        background-position: -200% center;
-      }
+      0%, 100% { background-position: 200% center; }
+      50%      { background-position: -200% center; }
     }
 
-    .hero-glow {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80%;
-      height: 120%;
-      background: radial-gradient(ellipse, var(--glow), transparent 70%);
-      pointer-events: none;
-      animation: pulse 4s ease-in-out infinite;
-      z-index: -1;
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 0.3;
-        transform: translate(-50%, -50%) scale(1);
-      }
-      50% {
-        opacity: 0.6;
-        transform: translate(-50%, -50%) scale(1.1);
-      }
-    }
-
-    /* Tagline */
-    .tagline {
+    .sub {
       font-size: 1.05rem;
       font-weight: 400;
+      line-height: 1.55;
+      color: var(--text-mid);
+      max-width: 44ch;
+      opacity: 0;
+      animation: fadeUp 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 1.25s forwards;
+    }
+    .sub-accent {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 1.5s forwards;
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .meta-label {
+      font-family: var(--ff-mono);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
       color: var(--text-dim);
-      margin-bottom: 3.5rem;
-      letter-spacing: 0.01em;
+    }
+    .meta-value {
+      font-family: var(--ff-mono);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      letter-spacing: 0.04em;
+    }
+    .meta-value .accent {
+      color: var(--accent);
+    }
+
+    /* ── Orbital graph (right side) ─────────────── */
+    .graph {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      max-width: 520px;
+      justify-self: end;
       opacity: 0;
-      animation: fadeIn 1.5s ease 0.9s forwards;
+      animation: fadeIn 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 1.1s forwards;
+    }
+    .graph svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .graph .orbit {
+      fill: none;
+      stroke: var(--border-mid);
+      stroke-width: 0.5;
+      stroke-dasharray: 2 4;
+    }
+    .graph .orbit--a { animation: orbitSpin 60s linear infinite; transform-origin: center; transform-box: fill-box; }
+    .graph .orbit--b { animation: orbitSpin 90s linear infinite reverse; transform-origin: center; transform-box: fill-box; }
+    .graph .orbit--c { animation: orbitSpin 120s linear infinite; transform-origin: center; transform-box: fill-box; }
+
+    .graph .core-ring { animation: ringPulse 4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+    @keyframes ringPulse {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50%      { opacity: 1;   transform: scale(1.08); }
     }
 
-    /* Subtle divider line */
-    .divider {
-      width: 40px;
-      height: 1px;
-      background: var(--border);
-      margin: 3rem auto 0;
+    .graph .node {
+      animation: nodePulse 3.5s ease-in-out infinite;
+    }
+    .graph .node--1 { animation-delay: 0s; }
+    .graph .node--2 { animation-delay: 0.7s; }
+    .graph .node--3 { animation-delay: 1.4s; }
+    .graph .node--4 { animation-delay: 2.1s; }
+    .graph .node--5 { animation-delay: 2.8s; }
+    @keyframes nodePulse {
+      0%, 100% { opacity: 0.55; r: 3; }
+      50%      { opacity: 1;    r: 4.2; }
+    }
+    .graph .link {
+      stroke: var(--accent);
+      stroke-width: 0.4;
       opacity: 0;
-      animation: fadeIn 1.5s ease 1.5s forwards;
+      stroke-dasharray: 3 3;
+      animation: linkDraw 4s ease-in-out infinite;
+    }
+    .graph .link--1 { animation-delay: 0.5s; }
+    .graph .link--2 { animation-delay: 1.5s; }
+    .graph .link--3 { animation-delay: 2.5s; }
+    .graph .link--4 { animation-delay: 3.5s; }
+    @keyframes linkDraw {
+      0%   { opacity: 0; stroke-dashoffset: 40; }
+      40%  { opacity: 0.55; stroke-dashoffset: 0; }
+      80%  { opacity: 0.55; }
+      100% { opacity: 0; stroke-dashoffset: -40; }
+    }
+    @keyframes orbitSpin { to { transform: rotate(360deg); } }
+
+    /* ── Kinetic marquee (bottom strip) ─────────── */
+    .marquee {
+      position: fixed;
+      bottom: calc(var(--pad-y) + 44px);
+      left: 0; right: 0;
+      overflow: hidden;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0;
+      animation: fadeIn 1.5s ease 2s forwards;
+      mask-image: linear-gradient(90deg, transparent 0%, #000 15%, #000 85%, transparent 100%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 15%, #000 85%, transparent 100%);
+    }
+    .marquee-track {
+      display: inline-flex;
+      white-space: nowrap;
+      animation: marquee 70s linear infinite;
+      font-family: var(--ff-mono);
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0 2rem;
+    }
+    .marquee-item::after {
+      content: "";
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.5;
+      margin-left: 1.8rem;
+    }
+    .marquee-item .val { color: var(--text-mid); }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
     }
 
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
+    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes fadeUp {
+      0%   { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ─────────────────────────────── */
+    @media (max-width: 900px) {
+      .stage {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 6rem var(--pad-x) 8rem;
+      }
+      .graph {
+        max-width: 340px;
+        justify-self: center;
+      }
+      .corner { width: 20px; height: 20px; }
+      .chrome {
+        padding: var(--pad-y) var(--pad-x);
       }
     }
 
-    /* Mobile adjustments */
-    @media (max-width: 480px) {
-      .content {
-        padding: 1.5rem;
+    @media (max-width: 540px) {
+      :root {
+        --pad-x: 1.25rem;
+        --pad-y: 1rem;
       }
+      .chrome--top .brand-name,
+      .status-text { font-size: 0.62rem; letter-spacing: 0.18em; }
+      .status { padding: 0.35rem 0.65rem 0.35rem 0.55rem; }
+      .headline { font-size: clamp(2rem, 10vw, 2.8rem); }
+      .sub { font-size: 0.98rem; }
+      .meta-row { flex-wrap: wrap; gap: 1rem 1.5rem; margin-top: 2.25rem; }
+      .chrome--bottom { padding-bottom: calc(var(--pad-y) + 2px); }
+      .marquee { bottom: calc(var(--pad-y) + 34px); }
+      .graph { max-width: 260px; }
+    }
 
-      .brand {
-        margin-bottom: 3rem;
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
       }
-
-      .tagline {
-        font-size: 0.95rem;
-        margin-bottom: 2.5rem;
-      }
-
     }
   </style>
 </head>
 <body>
 
-  <!-- Ambient background -->
-  <div class="ambient">
-    <div class="ambient-orb"></div>
-    <div class="ambient-orb"></div>
-    <div class="ambient-orb"></div>
+  <!-- Film grain -->
+  <div class="grain"></div>
+
+  <!-- Vignette -->
+  <div class="vignette"></div>
+
+  <!-- Ambient orbs -->
+  <div class="ambient" aria-hidden="true">
+    <div class="orb orb--1"></div>
+    <div class="orb orb--2"></div>
+    <div class="orb orb--3"></div>
   </div>
 
   <!-- Particle field -->
-  <div class="particles" id="particles"></div>
+  <div class="particles" id="particles" aria-hidden="true"></div>
 
-  <!-- Main content -->
-  <main class="content">
+  <!-- Corner brackets -->
+  <div class="corner corner--tl" aria-hidden="true"></div>
+  <div class="corner corner--tr" aria-hidden="true"></div>
+  <div class="corner corner--bl" aria-hidden="true"></div>
+  <div class="corner corner--br" aria-hidden="true"></div>
+
+  <!-- Top chrome -->
+  <header class="chrome chrome--top">
     <div class="brand">
-      <div class="brand-mark">
-        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="14" r="6" stroke="#4fffff" stroke-width="1.2" opacity="0.6"/>
-          <circle cx="14" cy="14" r="11" stroke="#4fffff" stroke-width="0.5" opacity="0.2"/>
-          <circle cx="14" cy="14" r="2" fill="#4fffff" opacity="0.9"/>
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 22 22" fill="none">
+          <circle class="ring-outer" cx="11" cy="11" r="9.5" stroke="#63dce3" stroke-width="0.4" stroke-dasharray="1 3" opacity="0.5"/>
+          <circle cx="11" cy="11" r="5.5" stroke="#63dce3" stroke-width="0.8" opacity="0.7"/>
+          <circle class="core" cx="11" cy="11" r="1.8" fill="#63dce3"/>
         </svg>
-      </div>
+      </span>
       <span class="brand-name">App Agentic</span>
     </div>
+    <div class="status">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="status-text">System bootstrapping &middot; 2026</span>
+    </div>
+  </header>
 
-    <h1 class="hero-text">
-      <div class="hero-glow"></div>
-      <span class="shimmer">The agentic era is here</span>
-    </h1>
+  <!-- Stage -->
+  <main class="stage">
+    <div class="hero">
+      <div class="chapter">
+        <span class="chapter-line" aria-hidden="true"></span>
+        <span class="chapter-label">Chapter 001 &middot; Signal</span>
+      </div>
 
-    <p class="tagline">AI agents for the next generation of apps</p>
+      <h1 class="headline">
+        <span class="line line--1">The agentic</span>
+        <span class="line line--2"><em>era</em> is here.</span>
+      </h1>
 
-    <div class="divider"></div>
+      <p class="sub">
+        A new operating layer for the next generation of mobile software &mdash;
+        <span class="sub-accent">agents that ship, test, and run your apps for you.</span>
+      </p>
+
+      <div class="meta-row">
+        <div class="meta-item">
+          <span class="meta-label">Stage</span>
+          <span class="meta-value">Pre-launch</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Arriving</span>
+          <span class="meta-value"><span class="accent">Q3</span> &middot; 2026</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Node</span>
+          <span class="meta-value">LON &middot; 51.50&deg;N</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orbital agent graph -->
+    <div class="graph" aria-hidden="true">
+      <svg viewBox="0 0 200 200">
+        <!-- orbits -->
+        <circle class="orbit orbit--a" cx="100" cy="100" r="92"/>
+        <circle class="orbit orbit--b" cx="100" cy="100" r="68"/>
+        <circle class="orbit orbit--c" cx="100" cy="100" r="42"/>
+
+        <!-- central ring cluster -->
+        <g class="core-ring">
+          <circle cx="100" cy="100" r="18" fill="none" stroke="#63dce3" stroke-width="0.6" opacity="0.8"/>
+          <circle cx="100" cy="100" r="10" fill="none" stroke="#63dce3" stroke-width="1" opacity="1"/>
+          <circle cx="100" cy="100" r="3" fill="#63dce3"/>
+        </g>
+
+        <!-- links (animate draw) -->
+        <line class="link link--1" x1="100" y1="100" x2="34"  y2="76"/>
+        <line class="link link--2" x1="100" y1="100" x2="166" y2="66"/>
+        <line class="link link--3" x1="100" y1="100" x2="152" y2="164"/>
+        <line class="link link--4" x1="100" y1="100" x2="46"  y2="152"/>
+
+        <!-- nodes -->
+        <circle class="node node--1" cx="34"  cy="76"  r="3.5" fill="#63dce3"/>
+        <circle class="node node--2" cx="166" cy="66"  r="3.5" fill="#63dce3"/>
+        <circle class="node node--3" cx="152" cy="164" r="3.5" fill="#63dce3"/>
+        <circle class="node node--4" cx="46"  cy="152" r="3.5" fill="#63dce3"/>
+        <circle class="node node--5" cx="100" cy="18"  r="3"   fill="#f4c47a"/>
+
+        <!-- labels -->
+        <g font-family="Geist Mono, monospace" font-size="5" fill="#52525b" letter-spacing="0.5">
+          <text x="34"  y="68"  text-anchor="middle">AG-01</text>
+          <text x="166" y="58"  text-anchor="middle">AG-02</text>
+          <text x="152" y="176" text-anchor="middle">AG-03</text>
+          <text x="46"  y="164" text-anchor="middle">AG-04</text>
+          <text x="100" y="10"  text-anchor="middle" fill="#8a8a95">CORE</text>
+        </g>
+      </svg>
+    </div>
   </main>
 
+  <!-- Kinetic marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marquee-track"></div>
+  </div>
+
+  <!-- Bottom chrome -->
+  <footer class="chrome chrome--bottom">
+    <span class="chrome-meta">51.5074&deg;N / 0.1278&deg;W</span>
+    <span class="chrome-meta">MMXXVI &middot; App Agentic Labs</span>
+  </footer>
+
   <script>
-    // Particles
+    // Particles — subtle, slow
     (function() {
       const container = document.getElementById('particles');
-      const count = 30;
+      const count = 22;
       for (let i = 0; i < count; i++) {
         const p = document.createElement('div');
         p.className = 'particle';
-        p.style.left = Math.random() * 100 + '%';
-        p.style.top = Math.random() * 100 + '%';
-        p.style.animationDuration = (15 + Math.random() * 25) + 's';
-        p.style.animationDelay = (Math.random() * 20) + 's';
-        p.style.width = (1 + Math.random() * 1.5) + 'px';
-        p.style.height = p.style.width;
+        p.style.left  = Math.random() * 100 + '%';
+        p.style.top   = Math.random() * 100 + '%';
+        const size = 1 + Math.random() * 1.3;
+        p.style.width  = size + 'px';
+        p.style.height = size + 'px';
+        p.style.animationDuration = (22 + Math.random() * 26) + 's';
+        p.style.animationDelay    = (Math.random() * 22) + 's';
         container.appendChild(p);
       }
     })();
 
+    // Kinetic marquee content — build twice for seamless loop
+    (function() {
+      const track = document.getElementById('marquee-track');
+      const items = [
+        ['Uptime',      '99.82%'],
+        ['Agents',      '0047 online'],
+        ['Latency',     '18ms p50'],
+        ['Runtime',     'v0.1.3-rc'],
+        ['Region',      'lon · sfo · tyo'],
+        ['Build',       '#2f4e9c'],
+        ['Heartbeat',   'stable'],
+        ['Protocol',    'MCP / A2A'],
+      ];
+      const html = items.map(([k, v]) =>
+        '<span class="marquee-item">' + k + ' <span class="val">' + v + '</span></span>'
+      ).join('');
+      track.innerHTML = html + html;
+    })();
   </script>
 </body>
 </html>
