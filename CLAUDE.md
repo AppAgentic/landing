@@ -76,7 +76,7 @@ Landing/
 ## Assumptions to verify before launch
 - **Email domain `appagentic.dev`** (hello@ / support@ / privacy@) is assumed from the AppAgentic browser-profile email. Confirm these mailboxes exist / forward, or swap to the real support address.
 - **Company name** rendered as "App Agentic" (no legal entity suffix like Ltd). Add the registered entity name + company number/address if one exists — Apple looks favourably on a verifiable legal entity.
-- **Location** stated as "London, United Kingdom" (carried over from the original page's LON coordinates). Update if HQ differs.
+- **Location** stated as "Manchester, United Kingdom". Keep this aligned with Apple enrollment details.
 - **Founded 2026** — adjust if incorrect.
 
 ## Deployment
