@@ -8,12 +8,15 @@ It was expanded from a single-screen "teaser" into a full, scrollable multi-sect
 ## Tech Stack
 - **HTML/CSS/vanilla JS** -- zero dependencies
 - No framework, no npm, no build tools
-- Single `index.html` file contains everything (styles inline in `<style>`, one small JS block inline)
+- Static HTML/CSS. `index.html` contains the homepage styles inline; `privacy.html` and `terms.html` share `legal.css`.
 
 ## File Structure
 ```
 Landing/
-  index.html      # The entire site (HTML + CSS + JS)
+  index.html      # Homepage (HTML + CSS + small cosmetic JS)
+  privacy.html    # Standalone website Privacy Policy
+  terms.html      # Standalone website Terms of Use
+  legal.css       # Shared styling for standalone legal pages
   CLAUDE.md       # This file
   .gitignore      # Standard Node gitignore (from repo init)
 ```
@@ -24,9 +27,13 @@ Landing/
 3. **What we build** (`#work`) — 4 cards: agent-native apps, mobile experiences, agent infrastructure, applied research. Framed as *areas of work*, not shipped products.
 4. **Approach** (`#approach`) — 4 principles (design first, privacy by default, human in the loop, built to last).
 5. **Contact & support** (`#contact`) — mailto links for general / support / privacy, plus location.
-6. **Privacy policy** (`#privacy`) — website privacy policy (data collected, cookies, rights, retention).
-7. **Terms of use** (`#terms`) — informational-site terms.
-8. **Footer** — brand, company/contact/legal link columns, copyright.
+6. **Legal** (`#legal`) — concise directory linking to the standalone legal pages.
+7. **Footer** — brand, company/contact/legal link columns, copyright.
+
+## Legal Pages
+- `privacy.html` is the standalone website privacy policy (data collected, cookies, rights, retention).
+- `terms.html` is the standalone informational-site terms of use.
+- Keep legal documents on their own pages. Apple specifically questioned site substance/minimal content, and standalone legal URLs make the public website easier to review and reference.
 
 ## Content Truthfulness Rules (important)
 - The company is **pre-launch** — never claim live products, customers, funding, or metrics.

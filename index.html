@@ -16,7 +16,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230a0a0c'/><circle cx='16' cy='16' r='6' fill='none' stroke='%2363dce3' stroke-width='1.5' opacity='0.9'/><circle cx='16' cy='16' r='2' fill='%2363dce3'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
       margin: 0;
@@ -526,6 +526,17 @@
       line-height: 1.6;
       color: var(--text-mid);
     }
+    .legal-card {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+    .legal-card .card-title {
+      transition: color 0.25s ease;
+    }
+    .legal-card:hover .card-title {
+      color: var(--accent);
+    }
 
     /* ── Principles list ─────────────────────────── */
     .principles {
@@ -778,7 +789,7 @@
       <a class="nav-link" href="#about">About</a>
       <a class="nav-link" href="#work">What we build</a>
       <a class="nav-link" href="#approach">Approach</a>
-      <a class="nav-link" href="#privacy">Privacy</a>
+      <a class="nav-link" href="privacy.html">Privacy</a>
       <a class="nav-cta" href="#contact">Contact</a>
     </div>
   </nav>
@@ -1053,95 +1064,34 @@
 
   <hr class="rule">
 
-  <!-- Privacy Policy -->
-  <section class="section" id="privacy">
+  <!-- Legal -->
+  <section class="section section--tight" id="legal">
     <div class="eyebrow">
       <span class="eyebrow-line" aria-hidden="true"></span>
-      <span class="eyebrow-label">05 &middot; Privacy policy</span>
+      <span class="eyebrow-label">05 &middot; Legal</span>
     </div>
-    <h2 class="section-title">Privacy <em>policy</em>.</h2>
+    <h2 class="section-title">Separate policy <em>pages</em>.</h2>
+    <p class="section-intro">
+      Our privacy policy and website terms are published as standalone pages so visitors,
+      partners and Apple reviewers can open, reference and review each document directly.
+    </p>
 
-    <div class="legal">
-      <p>
-        This policy explains how App Agentic ("App Agentic", "we", "us") handles information in
-        connection with this website. App Agentic is pre-launch and does not currently offer a
-        publicly available product; this policy covers the website only. We will publish a
-        product-specific privacy policy before any product is released.
-      </p>
-
-      <h3>Information we collect</h3>
-      <p>This is a static informational website. We aim to collect as little as possible:</p>
-      <ul>
-        <li><strong>Information you choose to send us.</strong> If you email one of our addresses, we receive your email address, your message and anything you include in it.</li>
-        <li><strong>Basic technical data.</strong> Like most websites, our hosting provider may automatically log standard request data such as IP address, browser type and the pages requested, for security and to keep the site running.</li>
-      </ul>
-      <p>We do not sell personal data, and we do not use this site to build advertising profiles of visitors.</p>
-
-      <h3>Cookies and analytics</h3>
-      <p>
-        This site does not set advertising or tracking cookies. If we add privacy-respecting,
-        aggregate analytics in the future, we will update this policy to describe what is measured.
-      </p>
-
-      <h3>How we use information</h3>
-      <p>We use the limited information above only to respond to your enquiries, to provide support you request, to keep the site secure and operational, and to comply with our legal obligations.</p>
-
-      <h3>Sharing</h3>
-      <p>We share information only with service providers that help us operate this site (such as our hosting and email providers), and where required by law. These providers act on our instructions and are not permitted to use your information for their own purposes.</p>
-
-      <h3>Data retention</h3>
-      <p>We keep correspondence for as long as needed to handle your request and for a reasonable period afterwards, then delete it.</p>
-
-      <h3>Your rights</h3>
-      <p>
-        Depending on where you live, you may have rights to access, correct, or delete the
-        personal information we hold about you, or to object to certain processing. To make a
-        request, email <a href="mailto:privacy@appagentic.dev">privacy@appagentic.dev</a> and we
-        will respond in line with applicable law.
-      </p>
-
-      <h3>Children</h3>
-      <p>This website is intended for a general, adult audience and is not directed at children.</p>
-
-      <h3>Changes</h3>
-      <p>We may update this policy as the company evolves. Material changes will be reflected by updating the date below.</p>
-
-      <p class="legal-updated">Last updated &middot; June 2026</p>
-    </div>
-  </section>
-
-  <hr class="rule">
-
-  <!-- Terms -->
-  <section class="section" id="terms">
-    <div class="eyebrow">
-      <span class="eyebrow-line" aria-hidden="true"></span>
-      <span class="eyebrow-label">06 &middot; Terms of use</span>
-    </div>
-    <h2 class="section-title">Terms of <em>use</em>.</h2>
-
-    <div class="legal">
-      <p>These terms govern your use of this website. By using the site, you agree to them.</p>
-
-      <h3>Informational purpose</h3>
-      <p>This website is provided for general information about App Agentic. Content describes a pre-launch company and our intended areas of work; it does not constitute an offer, a guarantee of any future product or feature, or professional advice.</p>
-
-      <h3>Intellectual property</h3>
-      <p>The App Agentic name, logo, text and design on this site are owned by App Agentic unless otherwise stated. You may view and share the site, but you may not copy or reuse its branding or content for commercial purposes without our permission.</p>
-
-      <h3>Acceptable use</h3>
-      <p>You agree not to misuse the site, attempt to disrupt it, or use it for any unlawful purpose.</p>
-
-      <h3>No warranty</h3>
-      <p>The site is provided "as is" without warranties of any kind. We do our best to keep it accurate and available but cannot guarantee that it will always be error-free or uninterrupted.</p>
-
-      <h3>Limitation of liability</h3>
-      <p>To the extent permitted by law, App Agentic is not liable for any loss arising from your use of, or inability to use, this website.</p>
-
-      <h3>Contact</h3>
-      <p>Questions about these terms? Email <a href="mailto:hello@appagentic.dev">hello@appagentic.dev</a>.</p>
-
-      <p class="legal-updated">Last updated &middot; June 2026</p>
+    <div class="grid grid--2">
+      <a class="card legal-card" href="privacy.html">
+        <span class="card-index">L&middot;01</span>
+        <h3 class="card-title">Privacy policy</h3>
+        <p class="card-body">
+          How this website handles enquiries, basic technical data, cookies, retention and
+          privacy requests.
+        </p>
+      </a>
+      <a class="card legal-card" href="terms.html">
+        <span class="card-index">L&middot;02</span>
+        <h3 class="card-title">Terms of use</h3>
+        <p class="card-body">
+          The terms that apply when visitors use this informational website and its content.
+        </p>
+      </a>
     </div>
   </section>
 
@@ -1177,8 +1127,8 @@
         </div>
         <div class="footer-col">
           <h4>Legal</h4>
-          <a href="#privacy">Privacy policy</a>
-          <a href="#terms">Terms of use</a>
+          <a href="privacy.html">Privacy policy</a>
+          <a href="terms.html">Terms of use</a>
         </div>
       </div>
     </div>
