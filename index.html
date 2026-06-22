@@ -3,8 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App Agentic</title>
-  <meta name="description" content="A new operating layer for the next generation of apps.">
+  <title>App Agentic — A software studio building AI-native applications</title>
+  <meta name="description" content="App Agentic is a London-based software studio building AI-native applications and the agent infrastructure that runs them. Pre-launch.">
+  <meta name="theme-color" content="#0a0a0c">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="App Agentic">
+  <meta property="og:description" content="A software studio building AI-native applications and the agent infrastructure that runs them.">
+  <meta property="og:url" content="https://appagentic.dev/">
+
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230a0a0c'/><circle cx='16' cy='16' r='6' fill='none' stroke='%2363dce3' stroke-width='1.5' opacity='0.9'/><circle cx='16' cy='16' r='2' fill='%2363dce3'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,11 +27,12 @@
     :root {
       --bg:          #0a0a0c;
       --bg-elev:     #111114;
+      --bg-card:     rgba(255, 255, 255, 0.018);
       --border:      rgba(255, 255, 255, 0.06);
       --border-mid:  rgba(255, 255, 255, 0.12);
       --text:        #e8e8ed;
-      --text-mid:    #8a8a95;
-      --text-dim:    #52525b;
+      --text-mid:    #9a9aa5;
+      --text-dim:    #62626b;
       --accent:      #63dce3;
       --accent-soft: rgba(99, 220, 227, 0.10);
       --accent-glow: rgba(99, 220, 227, 0.22);
@@ -33,11 +42,15 @@
       --ff-mono:  'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
       --ff-serif: 'Instrument Serif', Georgia, serif;
 
-      --pad-x: clamp(1.5rem, 4vw, 3.5rem);
-      --pad-y: clamp(1.25rem, 3vh, 2rem);
+      --pad-x: clamp(1.25rem, 5vw, 5rem);
+      --maxw:  1180px;
     }
 
-    html { font-size: 16px; }
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
 
     body {
       font-family: var(--ff-sans);
@@ -45,36 +58,31 @@
       color: var(--text);
       min-height: 100dvh;
       overflow-x: hidden;
-      overflow-y: hidden;
       position: relative;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       font-feature-settings: "ss01", "cv11";
+      line-height: 1.6;
     }
 
-    /* ── Grain overlay ──────────────────────────── */
+    a { color: inherit; }
+
+    ::selection {
+      background: var(--accent-glow);
+      color: #fff;
+    }
+
+    /* ── Fixed atmosphere layers ─────────────────── */
     .grain {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 100;
-      opacity: 0.18;
+      opacity: 0.15;
       mix-blend-mode: overlay;
       background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
     }
 
-    /* ── Vignette ───────────────────────────────── */
-    .vignette {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-      background:
-        radial-gradient(ellipse at 70% 60%, transparent 40%, rgba(0,0,0,0.55) 100%),
-        radial-gradient(ellipse at 20% 30%, rgba(99, 220, 227, 0.04), transparent 60%);
-    }
-
-    /* ── Ambient orbs (slow drift) ──────────────── */
     .ambient {
       position: fixed;
       inset: 0;
@@ -82,49 +90,43 @@
       z-index: 0;
       overflow: hidden;
     }
-
     .orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(140px);
-      opacity: 0;
-      animation: drift 28s ease-in-out infinite;
+      filter: blur(150px);
+      opacity: 0.55;
+      animation: drift 30s ease-in-out infinite;
       will-change: transform, opacity;
     }
-
     .orb--1 {
       width: 620px; height: 620px;
-      background: radial-gradient(circle, rgba(99, 220, 227, 0.09), transparent 70%);
-      top: -180px; left: -140px;
-      animation-delay: 0s;
+      background: radial-gradient(circle, rgba(99, 220, 227, 0.10), transparent 70%);
+      top: -200px; left: -160px;
     }
     .orb--2 {
       width: 520px; height: 520px;
-      background: radial-gradient(circle, rgba(120, 190, 255, 0.04), transparent 70%);
-      bottom: -180px; right: 10%;
-      animation-delay: -9s;
+      background: radial-gradient(circle, rgba(120, 190, 255, 0.05), transparent 70%);
+      top: 30%; right: -180px;
+      animation-delay: -10s;
     }
     .orb--3 {
-      width: 380px; height: 380px;
-      background: radial-gradient(circle, rgba(244, 196, 122, 0.03), transparent 70%);
-      top: 45%; right: -120px;
-      animation-delay: -17s;
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(244, 196, 122, 0.035), transparent 70%);
+      top: 75%; left: 5%;
+      animation-delay: -18s;
     }
-
     @keyframes drift {
       0%, 100% { opacity: 0.55; transform: translate(0, 0) scale(1); }
       33%      { opacity: 0.75; transform: translate(40px, -30px) scale(1.06); }
-      66%      { opacity: 0.45; transform: translate(-25px, 25px) scale(0.96); }
+      66%      { opacity: 0.40; transform: translate(-25px, 25px) scale(0.96); }
     }
 
-    /* ── Particles ──────────────────────────────── */
     .particles {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 2;
+      z-index: 1;
     }
-
     .particle {
       position: absolute;
       background: var(--accent);
@@ -133,199 +135,184 @@
       animation: float linear infinite;
       will-change: transform, opacity;
     }
-
     @keyframes float {
-      0%   { opacity: 0;   transform: translateY(0) translateX(0); }
-      15%  { opacity: 0.35; }
-      85%  { opacity: 0.35; }
+      0%   { opacity: 0;    transform: translateY(0) translateX(0); }
+      15%  { opacity: 0.30; }
+      85%  { opacity: 0.30; }
       100% { opacity: 0; transform: translateY(-100vh) translateX(30px); }
     }
 
-    /* ── Corner brackets (cinematic chrome) ─────── */
-    .corner {
+    /* ── Nav ─────────────────────────────────────── */
+    .nav {
       position: fixed;
-      width: 28px;
-      height: 28px;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0;
-      animation: cornerIn 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s forwards;
-    }
-    .corner::before, .corner::after {
-      content: "";
-      position: absolute;
-      background: var(--border-mid);
-    }
-    .corner::before { width: 100%; height: 1px; }
-    .corner::after  { width: 1px;  height: 100%; }
-
-    .corner--tl { top: var(--pad-y);    left: var(--pad-x); }
-    .corner--tl::before { top: 0; left: 0; }
-    .corner--tl::after  { top: 0; left: 0; }
-
-    .corner--tr { top: var(--pad-y);    right: var(--pad-x); }
-    .corner--tr::before { top: 0; right: 0; }
-    .corner--tr::after  { top: 0; right: 0; }
-
-    .corner--bl { bottom: var(--pad-y); left: var(--pad-x); }
-    .corner--bl::before { bottom: 0; left: 0; }
-    .corner--bl::after  { bottom: 0; left: 0; }
-
-    .corner--br { bottom: var(--pad-y); right: var(--pad-x); }
-    .corner--br::before { bottom: 0; right: 0; }
-    .corner--br::after  { bottom: 0; right: 0; }
-
-    @keyframes cornerIn {
-      0%   { opacity: 0; transform: scale(0.7); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-
-    /* ── Chrome (top & bottom bars) ─────────────── */
-    .chrome {
-      position: fixed;
-      left: 0; right: 0;
-      padding: calc(var(--pad-y) + 6px) calc(var(--pad-x) + 28px);
+      top: 0; left: 0; right: 0;
+      z-index: 50;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      z-index: 4;
-      pointer-events: none;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.1rem var(--pad-x);
+      background: rgba(10, 10, 12, 0.55);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
     }
-    .chrome > * { pointer-events: auto; }
-    .chrome--top    { top: 0; }
-    .chrome--bottom { bottom: 0; }
-
-    /* ── Brand mark ─────────────────────────────── */
     .brand {
       display: inline-flex;
       align-items: center;
       gap: 0.65rem;
-      opacity: 0;
-      animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
+      text-decoration: none;
+      flex-shrink: 0;
     }
-    .brand-mark {
-      width: 22px; height: 22px;
-      display: block;
-    }
+    .brand-mark { width: 24px; height: 24px; display: block; }
     .brand-mark svg { width: 100%; height: 100%; }
-    .brand-mark .ring-outer { animation: ringSpin 18s linear infinite; transform-origin: center; transform-box: fill-box; }
-    .brand-mark .core        { animation: corePulse 3s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
-
-    @keyframes ringSpin   { to { transform: rotate(360deg); } }
-    @keyframes corePulse  {
+    .brand-mark .ring-outer { animation: ringSpin 22s linear infinite; transform-origin: center; transform-box: fill-box; }
+    .brand-mark .core { animation: corePulse 3s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+    @keyframes ringSpin { to { transform: rotate(360deg); } }
+    @keyframes corePulse {
       0%, 100% { opacity: 0.85; transform: scale(1); }
-      50%      { opacity: 1;    transform: scale(1.15); }
+      50%      { opacity: 1;    transform: scale(1.18); }
     }
-
     .brand-name {
       font-family: var(--ff-mono);
-      font-size: 0.72rem;
+      font-size: 0.74rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .nav-link {
+      font-family: var(--ff-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+    .nav-link:hover { color: var(--text); }
+    .nav-cta {
+      font-family: var(--ff-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border-mid);
+      border-radius: 999px;
+      transition: border-color 0.25s ease, background 0.25s ease;
+      white-space: nowrap;
+    }
+    .nav-cta:hover { border-color: var(--accent); background: var(--accent-soft); }
+
+    @media (max-width: 860px) {
+      .nav-links .nav-link { display: none; }
+      .nav-links { gap: 0; }
+    }
+
+    /* ── Layout primitives ───────────────────────── */
+    .section {
+      position: relative;
+      z-index: 3;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: clamp(4.5rem, 10vh, 8rem) var(--pad-x);
+    }
+    .section--tight { padding-top: clamp(2.5rem, 6vh, 4rem); }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.9rem;
+      margin-bottom: 1.6rem;
+    }
+    .eyebrow-line {
+      width: 32px; height: 1px;
+      background: var(--border-mid);
+      position: relative;
+      overflow: hidden;
+    }
+    .eyebrow-line::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      animation: scan 4.5s ease-in-out infinite;
+    }
+    @keyframes scan {
+      0%, 100% { transform: translateX(-100%); }
+      50%      { transform: translateX(100%); }
+    }
+    .eyebrow-label {
+      font-family: var(--ff-mono);
+      font-size: 0.68rem;
       font-weight: 500;
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--text-mid);
     }
 
-    /* ── Status pill (top right) ────────────────── */
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.55rem;
-      padding: 0.42rem 0.85rem 0.42rem 0.7rem;
-      border: 1px solid var(--border-mid);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.02);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-      font-family: var(--ff-mono);
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-mid);
-      opacity: 0;
-      animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.55s forwards;
-    }
-
-    .status-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 8px var(--accent-glow);
-      position: relative;
-      flex-shrink: 0;
-    }
-    .status-dot::after {
-      content: "";
-      position: absolute;
-      inset: -3px;
-      border-radius: 50%;
-      background: var(--accent);
-      opacity: 0.4;
-      animation: ping 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
-    }
-    @keyframes ping {
-      0%   { transform: scale(0.8); opacity: 0.4; }
-      80%, 100% { transform: scale(2.2); opacity: 0; }
-    }
-
-    /* ── Bottom chrome text ─────────────────────── */
-    .chrome-meta {
-      font-family: var(--ff-mono);
-      font-size: 0.68rem;
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
       font-weight: 400;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      opacity: 0;
-      animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 1.8s forwards;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      max-width: 22ch;
+    }
+    .section-title em {
+      font-family: var(--ff-serif);
+      font-style: italic;
+      color: var(--accent);
+      letter-spacing: -0.01em;
+    }
+    .section-intro {
+      margin-top: 1.4rem;
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: var(--text-mid);
+      max-width: 56ch;
     }
 
-    /* ── Stage (main content — asymmetric) ──────── */
-    .stage {
+    /* ── Hero ────────────────────────────────────── */
+    .hero {
       position: relative;
       z-index: 3;
-      min-height: 100dvh;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
-      gap: clamp(2rem, 5vw, 5rem);
-      align-items: center;
-      padding: 6rem calc(var(--pad-x) + 28px);
-      max-width: 1600px;
+      max-width: var(--maxw);
       margin: 0 auto;
+      padding: clamp(8rem, 18vh, 12rem) var(--pad-x) clamp(4rem, 9vh, 7rem);
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
+      gap: clamp(2rem, 5vw, 4.5rem);
+      align-items: center;
     }
-
-    /* ── Hero block (left) ──────────────────────── */
-    .hero {
-      max-width: 620px;
-      padding-left: clamp(0rem, 4vw, 3rem);
-    }
+    .hero-copy { max-width: 640px; }
 
     .chapter {
       display: inline-flex;
       align-items: center;
       gap: 0.9rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
       opacity: 0;
-      animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s forwards;
+      animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards;
     }
     .chapter-line {
       width: 36px; height: 1px;
       background: var(--border-mid);
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
     .chapter-line::after {
       content: "";
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background: linear-gradient(90deg, transparent, var(--accent), transparent);
       animation: scan 4s ease-in-out infinite;
-    }
-    @keyframes scan {
-      0%, 100% { transform: translateX(-100%); }
-      50%      { transform: translateX(100%); }
     }
     .chapter-label {
       font-family: var(--ff-mono);
@@ -337,13 +324,11 @@
     }
 
     .headline {
-      font-family: var(--ff-sans);
-      font-size: clamp(2.3rem, 5.2vw, 4.4rem);
+      font-size: clamp(2.4rem, 6vw, 4.6rem);
       font-weight: 400;
-      line-height: 1.02;
-      letter-spacing: -0.035em;
-      color: var(--text);
-      margin-bottom: 1.6rem;
+      line-height: 1.0;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
     }
     .headline .line {
       display: block;
@@ -351,24 +336,20 @@
       transform: translateY(18px);
       animation: lineIn 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     }
-    .headline .line--1 { animation-delay: 0.85s; }
-    .headline .line--2 { animation-delay: 1.0s;  }
+    .headline .line--1 { animation-delay: 0.35s; }
+    .headline .line--2 { animation-delay: 0.5s; }
     .headline em {
       font-family: var(--ff-serif);
       font-style: italic;
       font-weight: 400;
       color: transparent;
-      background: linear-gradient(120deg,
-        var(--accent) 0%,
-        #b8f3f7 50%,
-        var(--accent) 100%);
+      background: linear-gradient(120deg, var(--accent) 0%, #b8f3f7 50%, var(--accent) 100%);
       background-size: 200% 100%;
       -webkit-background-clip: text;
       background-clip: text;
       animation: shimmer 7s ease-in-out infinite;
       letter-spacing: -0.02em;
     }
-
     @keyframes lineIn {
       0%   { opacity: 0; transform: translateY(18px); }
       100% { opacity: 1; transform: translateY(0); }
@@ -378,93 +359,103 @@
       50%      { background-position: -200% center; }
     }
 
-    .sub {
-      font-size: 1.05rem;
-      font-weight: 400;
-      line-height: 1.55;
+    .hero-sub {
+      font-size: clamp(1rem, 1.4vw, 1.18rem);
+      line-height: 1.6;
       color: var(--text-mid);
-      max-width: 44ch;
+      max-width: 50ch;
       opacity: 0;
-      animation: fadeUp 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 1.25s forwards;
+      animation: fadeUp 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s forwards;
     }
-    .sub-accent {
-      color: var(--text);
-      font-weight: 500;
-    }
+    .hero-sub strong { color: var(--text); font-weight: 500; }
 
-    .meta-row {
+    .hero-actions {
       display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      margin-top: 2.2rem;
+      opacity: 0;
+      animation: fadeUp 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.85s forwards;
+    }
+    .btn {
+      display: inline-flex;
       align-items: center;
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-      padding-top: 1.5rem;
+      gap: 0.5rem;
+      font-family: var(--ff-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 1.5rem;
+      border-radius: 999px;
+      transition: all 0.25s ease;
+    }
+    .btn--primary {
+      background: var(--accent);
+      color: #06181a;
+      box-shadow: 0 0 30px rgba(99, 220, 227, 0.18);
+    }
+    .btn--primary:hover { box-shadow: 0 0 40px rgba(99, 220, 227, 0.35); transform: translateY(-1px); }
+    .btn--ghost {
+      border: 1px solid var(--border-mid);
+      color: var(--text);
+    }
+    .btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 2.6rem;
+      padding-top: 1.6rem;
       border-top: 1px solid var(--border);
       opacity: 0;
-      animation: fadeUp 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 1.3s forwards;
+      animation: fadeUp 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 1s forwards;
     }
-    .meta-item {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
+    .meta-item { display: flex; flex-direction: column; gap: 0.25rem; }
     .meta-label {
       font-family: var(--ff-mono);
       font-size: 0.6rem;
       font-weight: 500;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--text-dim);
     }
     .meta-value {
       font-family: var(--ff-mono);
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 500;
       color: var(--text-mid);
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
     }
-    .meta-value .accent {
-      color: var(--accent);
-    }
+    .meta-value .accent { color: var(--accent); }
 
-    /* ── Orbital graph (right side) ─────────────── */
+    /* ── Orbital graph ───────────────────────────── */
     .graph {
       position: relative;
       width: 100%;
       aspect-ratio: 1;
-      max-width: 520px;
+      max-width: 460px;
       justify-self: end;
       opacity: 0;
-      animation: fadeIn 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 1.1s forwards;
+      animation: fadeIn 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s forwards;
     }
-    .graph svg {
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-    .graph .orbit {
-      fill: none;
-      stroke: var(--border-mid);
-      stroke-width: 0.5;
-      stroke-dasharray: 2 4;
-    }
+    .graph svg { width: 100%; height: 100%; overflow: visible; }
+    .graph .orbit { fill: none; stroke: var(--border-mid); stroke-width: 0.5; stroke-dasharray: 2 4; }
     .graph .orbit--a { animation: orbitSpin 60s linear infinite; transform-origin: center; transform-box: fill-box; }
     .graph .orbit--b { animation: orbitSpin 90s linear infinite reverse; transform-origin: center; transform-box: fill-box; }
     .graph .orbit--c { animation: orbitSpin 120s linear infinite; transform-origin: center; transform-box: fill-box; }
-
     .graph .core-ring { animation: ringPulse 4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
     @keyframes ringPulse {
       0%, 100% { opacity: 0.6; transform: scale(1); }
       50%      { opacity: 1;   transform: scale(1.08); }
     }
-
-    .graph .node {
-      animation: nodePulse 3.5s ease-in-out infinite;
-    }
+    .graph .node { animation: nodePulse 3.5s ease-in-out infinite; }
     .graph .node--1 { animation-delay: 0s; }
     .graph .node--2 { animation-delay: 0.7s; }
     .graph .node--3 { animation-delay: 1.4s; }
     .graph .node--4 { animation-delay: 2.1s; }
-    .graph .node--5 { animation-delay: 2.8s; }
     @keyframes nodePulse {
       0%, 100% { opacity: 0.55; r: 3; }
       50%      { opacity: 1;    r: 4.2; }
@@ -488,48 +479,239 @@
     }
     @keyframes orbitSpin { to { transform: rotate(360deg); } }
 
-    /* ── Kinetic marquee (bottom strip) ─────────── */
-    .marquee {
-      position: fixed;
-      bottom: calc(var(--pad-y) + 44px);
-      left: 0; right: 0;
-      overflow: hidden;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0;
-      animation: fadeIn 1.5s ease 2s forwards;
-      mask-image: linear-gradient(90deg, transparent 0%, #000 15%, #000 85%, transparent 100%);
-      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 15%, #000 85%, transparent 100%);
+    /* ── Divider ─────────────────────────────────── */
+    .rule {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      border: none;
+      border-top: 1px solid var(--border);
     }
-    .marquee-track {
-      display: inline-flex;
-      white-space: nowrap;
-      animation: marquee 70s linear infinite;
+
+    /* ── Cards grid ──────────────────────────────── */
+    .grid {
+      display: grid;
+      gap: 1px;
+      margin-top: 3rem;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .grid--3 { grid-template-columns: repeat(3, 1fr); }
+    .grid--2 { grid-template-columns: repeat(2, 1fr); }
+
+    .card {
+      background: var(--bg);
+      padding: clamp(1.6rem, 3vw, 2.4rem);
+      position: relative;
+      transition: background 0.3s ease;
+    }
+    .card:hover { background: var(--bg-elev); }
+    .card-index {
       font-family: var(--ff-mono);
-      font-size: 0.68rem;
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+      opacity: 0.8;
+    }
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      margin: 1rem 0 0.7rem;
+    }
+    .card-body {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-mid);
+    }
+
+    /* ── Principles list ─────────────────────────── */
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem 3rem;
+      margin-top: 3rem;
+    }
+    .principle { display: flex; gap: 1.1rem; }
+    .principle-num {
+      font-family: var(--ff-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      padding-top: 0.25rem;
+      flex-shrink: 0;
+    }
+    .principle h3 {
+      font-size: 1.08rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.45rem;
+    }
+    .principle p {
+      font-size: 0.94rem;
+      line-height: 1.6;
+      color: var(--text-mid);
+    }
+
+    /* ── Two-column prose (about) ────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: clamp(2rem, 6vw, 5rem);
+      align-items: start;
+      margin-top: 1rem;
+    }
+    .about-prose p { margin-bottom: 1.1rem; color: var(--text-mid); line-height: 1.7; }
+    .about-prose p:last-child { margin-bottom: 0; }
+    .about-prose strong { color: var(--text); font-weight: 500; }
+    .about-aside {
+      border-left: 1px solid var(--border-mid);
+      padding-left: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+    }
+    .fact-label {
+      font-family: var(--ff-mono);
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+    .fact-value { font-size: 0.98rem; color: var(--text); font-weight: 400; }
+    .fact-value a { color: var(--accent); text-decoration: none; }
+    .fact-value a:hover { text-decoration: underline; }
+
+    /* ── Contact band ────────────────────────────── */
+    .contact-band {
+      background: linear-gradient(135deg, rgba(99,220,227,0.05), rgba(99,220,227,0.01));
+      border: 1px solid var(--border-mid);
+      border-radius: 20px;
+      padding: clamp(2.2rem, 5vw, 3.6rem);
+      margin-top: 3rem;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: clamp(2rem, 5vw, 4rem);
+      align-items: center;
+    }
+    .contact-band h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
       font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+    .contact-band h2 em { font-family: var(--ff-serif); font-style: italic; color: var(--accent); }
+    .contact-band p { color: var(--text-mid); margin-top: 1rem; line-height: 1.6; }
+    .contact-list { display: flex; flex-direction: column; gap: 1.2rem; }
+    .contact-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .contact-key {
+      font-family: var(--ff-mono);
+      font-size: 0.62rem;
+      font-weight: 500;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--text-dim);
     }
-    .marquee-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.8rem;
-      padding: 0 2rem;
+    .contact-val { font-size: 1.02rem; }
+    .contact-val a { color: var(--accent); text-decoration: none; }
+    .contact-val a:hover { text-decoration: underline; }
+
+    /* ── Legal sections ──────────────────────────── */
+    .legal { max-width: 760px; }
+    .legal h3 {
+      font-size: 1.05rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin: 2rem 0 0.6rem;
+      color: var(--text);
     }
-    .marquee-item::after {
-      content: "";
-      width: 3px; height: 3px;
-      border-radius: 50%;
-      background: var(--accent);
-      opacity: 0.5;
-      margin-left: 1.8rem;
+    .legal h3:first-of-type { margin-top: 2rem; }
+    .legal p, .legal li {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--text-mid);
     }
-    .marquee-item .val { color: var(--text-mid); }
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
+    .legal p { margin-bottom: 0.9rem; }
+    .legal ul { margin: 0 0 0.9rem 1.2rem; }
+    .legal li { margin-bottom: 0.4rem; }
+    .legal a { color: var(--accent); text-decoration: none; }
+    .legal a:hover { text-decoration: underline; }
+    .legal-updated {
+      font-family: var(--ff-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 1rem;
+    }
+
+    /* ── Footer ──────────────────────────────────── */
+    .footer {
+      position: relative;
+      z-index: 3;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+    .footer-inner {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 3rem var(--pad-x) 3.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .footer-brand { max-width: 280px; }
+    .footer-brand .brand { margin-bottom: 1rem; }
+    .footer-tag { font-size: 0.9rem; color: var(--text-mid); line-height: 1.6; }
+    .footer-cols { display: flex; gap: clamp(2.5rem, 6vw, 5rem); flex-wrap: wrap; }
+    .footer-col h4 {
+      font-family: var(--ff-mono);
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      text-decoration: none;
+      margin-bottom: 0.7rem;
+      transition: color 0.2s ease;
+    }
+    .footer-col a:hover { color: var(--text); }
+    .footer-bottom {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 1.5rem var(--pad-x) 2.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      justify-content: space-between;
+    }
+    .footer-bottom span {
+      font-family: var(--ff-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
     }
 
     @keyframes fadeIn { to { opacity: 1; } }
@@ -538,40 +720,29 @@
       100% { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── Responsive ─────────────────────────────── */
+    /* ── Responsive ──────────────────────────────── */
     @media (max-width: 900px) {
-      .stage {
+      .hero {
         grid-template-columns: 1fr;
         gap: 3rem;
-        padding: 6rem var(--pad-x) 8rem;
+        padding-top: 7rem;
       }
-      .graph {
-        max-width: 340px;
-        justify-self: center;
-      }
-      .corner { width: 20px; height: 20px; }
-      .chrome {
-        padding: var(--pad-y) var(--pad-x);
-      }
+      .graph { max-width: 320px; justify-self: center; order: -1; }
+      .grid--3, .grid--2 { grid-template-columns: 1fr; }
+      .principles { grid-template-columns: 1fr; gap: 2rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-aside { border-left: none; padding-left: 0; border-top: 1px solid var(--border-mid); padding-top: 2rem; }
+      .contact-band { grid-template-columns: 1fr; }
     }
-
     @media (max-width: 540px) {
-      :root {
-        --pad-x: 1.25rem;
-        --pad-y: 1rem;
-      }
-      .chrome--top .brand-name,
-      .status-text { font-size: 0.62rem; letter-spacing: 0.18em; }
-      .status { padding: 0.35rem 0.65rem 0.35rem 0.55rem; }
-      .headline { font-size: clamp(2rem, 10vw, 2.8rem); }
-      .sub { font-size: 0.98rem; }
-      .meta-row { flex-wrap: wrap; gap: 1rem 1.5rem; margin-top: 2.25rem; }
-      .chrome--bottom { padding-bottom: calc(var(--pad-y) + 2px); }
-      .marquee { bottom: calc(var(--pad-y) + 34px); }
-      .graph { max-width: 260px; }
+      .nav { padding: 0.9rem var(--pad-x); }
+      .brand-name { font-size: 0.68rem; letter-spacing: 0.16em; }
+      .hero-meta { gap: 1.4rem; }
+      .hero-actions .btn { flex: 1 1 auto; justify-content: center; }
     }
 
     @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
@@ -582,31 +753,18 @@
 </head>
 <body>
 
-  <!-- Film grain -->
-  <div class="grain"></div>
-
-  <!-- Vignette -->
-  <div class="vignette"></div>
-
-  <!-- Ambient orbs -->
+  <!-- Atmosphere -->
+  <div class="grain" aria-hidden="true"></div>
   <div class="ambient" aria-hidden="true">
     <div class="orb orb--1"></div>
     <div class="orb orb--2"></div>
     <div class="orb orb--3"></div>
   </div>
-
-  <!-- Particle field -->
   <div class="particles" id="particles" aria-hidden="true"></div>
 
-  <!-- Corner brackets -->
-  <div class="corner corner--tl" aria-hidden="true"></div>
-  <div class="corner corner--tr" aria-hidden="true"></div>
-  <div class="corner corner--bl" aria-hidden="true"></div>
-  <div class="corner corner--br" aria-hidden="true"></div>
-
-  <!-- Top chrome -->
-  <header class="chrome chrome--top">
-    <div class="brand">
+  <!-- Navigation -->
+  <nav class="nav">
+    <a class="brand" href="#top" aria-label="App Agentic — home">
       <span class="brand-mark" aria-hidden="true">
         <svg viewBox="0 0 22 22" fill="none">
           <circle class="ring-outer" cx="11" cy="11" r="9.5" stroke="#63dce3" stroke-width="0.4" stroke-dasharray="1 3" opacity="0.5"/>
@@ -615,129 +773,441 @@
         </svg>
       </span>
       <span class="brand-name">App Agentic</span>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="#about">About</a>
+      <a class="nav-link" href="#work">What we build</a>
+      <a class="nav-link" href="#approach">Approach</a>
+      <a class="nav-link" href="#privacy">Privacy</a>
+      <a class="nav-cta" href="#contact">Contact</a>
     </div>
-    <div class="status">
-      <span class="status-dot" aria-hidden="true"></span>
-      <span class="status-text">System bootstrapping &middot; 2026</span>
-    </div>
-  </header>
+  </nav>
 
-  <!-- Stage -->
-  <main class="stage">
-    <div class="hero">
+  <!-- Hero -->
+  <header class="hero" id="top">
+    <div class="hero-copy">
       <div class="chapter">
         <span class="chapter-line" aria-hidden="true"></span>
-        <span class="chapter-label">Chapter 001 &middot; Signal</span>
+        <span class="chapter-label">Software studio &middot; London</span>
       </div>
 
       <h1 class="headline">
-        <span class="line line--1">The agentic</span>
-        <span class="line line--2"><em>era</em> is here.</span>
+        <span class="line line--1">Software for the</span>
+        <span class="line line--2"><em>agentic</em> era.</span>
       </h1>
 
-      <div class="meta-row">
+      <p class="hero-sub">
+        App Agentic is a software studio building <strong>AI-native applications</strong>
+        &mdash; products designed around intelligent agents that do real work, together with
+        the infrastructure that lets them run reliably. We are an early-stage, pre-launch company.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn--primary" href="#work">What we build</a>
+        <a class="btn btn--ghost" href="#contact">Get in touch</a>
+      </div>
+
+      <div class="hero-meta">
         <div class="meta-item">
           <span class="meta-label">Stage</span>
           <span class="meta-value">Pre-launch</span>
         </div>
         <div class="meta-item">
-          <span class="meta-label">Arriving</span>
-          <span class="meta-value"><span class="accent">Q3</span> &middot; 2026</span>
+          <span class="meta-label">Discipline</span>
+          <span class="meta-value">Applied AI &middot; Apps</span>
         </div>
         <div class="meta-item">
-          <span class="meta-label">Node</span>
-          <span class="meta-value">LON &middot; 51.50&deg;N</span>
+          <span class="meta-label">Based in</span>
+          <span class="meta-value">London, <span class="accent">UK</span></span>
         </div>
       </div>
     </div>
 
     <!-- Orbital agent graph -->
     <div class="graph" aria-hidden="true">
-      <svg viewBox="0 0 200 200">
-        <!-- orbits -->
+      <svg viewBox="0 0 200 200" role="img">
         <circle class="orbit orbit--a" cx="100" cy="100" r="92"/>
         <circle class="orbit orbit--b" cx="100" cy="100" r="68"/>
         <circle class="orbit orbit--c" cx="100" cy="100" r="42"/>
-
-        <!-- central ring cluster -->
         <g class="core-ring">
           <circle cx="100" cy="100" r="18" fill="none" stroke="#63dce3" stroke-width="0.6" opacity="0.8"/>
           <circle cx="100" cy="100" r="10" fill="none" stroke="#63dce3" stroke-width="1" opacity="1"/>
           <circle cx="100" cy="100" r="3" fill="#63dce3"/>
         </g>
-
-        <!-- links (animate draw) -->
         <line class="link link--1" x1="100" y1="100" x2="34"  y2="76"/>
         <line class="link link--2" x1="100" y1="100" x2="166" y2="66"/>
         <line class="link link--3" x1="100" y1="100" x2="152" y2="164"/>
         <line class="link link--4" x1="100" y1="100" x2="46"  y2="152"/>
-
-        <!-- nodes -->
         <circle class="node node--1" cx="34"  cy="76"  r="3.5" fill="#63dce3"/>
         <circle class="node node--2" cx="166" cy="66"  r="3.5" fill="#63dce3"/>
         <circle class="node node--3" cx="152" cy="164" r="3.5" fill="#63dce3"/>
         <circle class="node node--4" cx="46"  cy="152" r="3.5" fill="#63dce3"/>
         <circle class="node node--5" cx="100" cy="18"  r="3"   fill="#f4c47a"/>
-
-        <!-- labels -->
         <g font-family="Geist Mono, monospace" font-size="5" fill="#52525b" letter-spacing="0.5">
-          <text x="34"  y="68"  text-anchor="middle">AG-01</text>
-          <text x="166" y="58"  text-anchor="middle">AG-02</text>
-          <text x="152" y="176" text-anchor="middle">AG-03</text>
-          <text x="46"  y="164" text-anchor="middle">AG-04</text>
+          <text x="34"  y="68"  text-anchor="middle">AGENT</text>
+          <text x="166" y="58"  text-anchor="middle">TOOLS</text>
+          <text x="152" y="176" text-anchor="middle">APP</text>
+          <text x="46"  y="164" text-anchor="middle">DATA</text>
           <text x="100" y="10"  text-anchor="middle" fill="#8a8a95">CORE</text>
         </g>
       </svg>
     </div>
-  </main>
+  </header>
 
-  <!-- Kinetic marquee -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-track" id="marquee-track"></div>
-  </div>
+  <hr class="rule">
 
-  <!-- Bottom chrome -->
-  <footer class="chrome chrome--bottom">
-    <span class="chrome-meta">51.5074&deg;N / 0.1278&deg;W</span>
-    <span class="chrome-meta">MMXXVI &middot; App Agentic Labs</span>
+  <!-- About -->
+  <section class="section" id="about">
+    <div class="eyebrow">
+      <span class="eyebrow-line" aria-hidden="true"></span>
+      <span class="eyebrow-label">01 &middot; About</span>
+    </div>
+    <h2 class="section-title">A studio for <em>AI-native</em> software.</h2>
+
+    <div class="about-grid">
+      <div class="about-aside">
+        <div>
+          <div class="fact-label">Company</div>
+          <div class="fact-value">App Agentic</div>
+        </div>
+        <div>
+          <div class="fact-label">Headquarters</div>
+          <div class="fact-value">London, United Kingdom</div>
+        </div>
+        <div>
+          <div class="fact-label">Founded</div>
+          <div class="fact-value">2026</div>
+        </div>
+        <div>
+          <div class="fact-label">Status</div>
+          <div class="fact-value">Pre-launch &middot; building</div>
+        </div>
+        <div>
+          <div class="fact-label">General enquiries</div>
+          <div class="fact-value"><a href="mailto:hello@appagentic.dev">hello@appagentic.dev</a></div>
+        </div>
+      </div>
+
+      <div class="about-prose">
+        <p>
+          App Agentic is an independent software studio. We design and build
+          <strong>applications that are agent-native</strong> &mdash; software shaped from the
+          ground up around autonomous AI agents that can plan, take action and complete tasks,
+          rather than chat features bolted onto existing products.
+        </p>
+        <p>
+          Our work spans the full stack of an agentic product: the <strong>consumer and
+          professional apps</strong> people actually use, and the <strong>runtime, orchestration
+          and tooling</strong> that lets agents operate dependably behind them. We care equally
+          about how a product feels and how trustworthy it is under the hood.
+        </p>
+        <p>
+          We are an early-stage company and currently pre-launch. We do not yet offer a publicly
+          available product. This site exists to explain who we are, what we are building, and how
+          to reach us &mdash; and to set out how we handle privacy and the terms under which this
+          site is provided.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- What we build -->
+  <section class="section" id="work">
+    <div class="eyebrow">
+      <span class="eyebrow-line" aria-hidden="true"></span>
+      <span class="eyebrow-label">02 &middot; What we build</span>
+    </div>
+    <h2 class="section-title">Four areas of <em>work</em>.</h2>
+    <p class="section-intro">
+      These are the areas we are actively building toward. They describe the focus of the studio,
+      not finished or commercially available products.
+    </p>
+
+    <div class="grid grid--2">
+      <article class="card">
+        <span class="card-index">A&middot;01</span>
+        <h3 class="card-title">Agent-native applications</h3>
+        <p class="card-body">
+          Apps designed around agents that carry out multi-step tasks on a person's behalf &mdash;
+          not just answer questions. We focus on clear, calm interfaces that keep a human in control
+          while the agent does the heavy lifting.
+        </p>
+      </article>
+      <article class="card">
+        <span class="card-index">A&middot;02</span>
+        <h3 class="card-title">Mobile experiences</h3>
+        <p class="card-body">
+          Native iOS and Android applications built with care for design, performance and
+          accessibility. We treat mobile as a first-class surface for agentic software, not an
+          afterthought to a web product.
+        </p>
+      </article>
+      <article class="card">
+        <span class="card-index">A&middot;03</span>
+        <h3 class="card-title">Agent infrastructure</h3>
+        <p class="card-body">
+          The runtime and orchestration layer that lets agents use tools, hold context and act
+          reliably &mdash; with observability, guardrails and predictable behaviour built in from
+          the start.
+        </p>
+      </article>
+      <article class="card">
+        <span class="card-index">A&middot;04</span>
+        <h3 class="card-title">Applied research</h3>
+        <p class="card-body">
+          Ongoing exploration of how multi-agent systems, tool use and emerging protocols change
+          the way software is designed, shipped and maintained. What we learn feeds directly back
+          into the products we build.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- Approach -->
+  <section class="section" id="approach">
+    <div class="eyebrow">
+      <span class="eyebrow-line" aria-hidden="true"></span>
+      <span class="eyebrow-label">03 &middot; Approach</span>
+    </div>
+    <h2 class="section-title">How we <em>work</em>.</h2>
+    <p class="section-intro">
+      A small set of principles guides every decision we make &mdash; from a single screen to the
+      architecture beneath it.
+    </p>
+
+    <div class="principles">
+      <div class="principle">
+        <span class="principle-num">01</span>
+        <div>
+          <h3>Design first</h3>
+          <p>Capable software should still feel effortless. We start from the experience and let the engineering serve it, never the other way around.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <span class="principle-num">02</span>
+        <div>
+          <h3>Privacy by default</h3>
+          <p>We collect as little as possible, are explicit about what we keep, and design systems so that the private path is the easy path.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <span class="principle-num">03</span>
+        <div>
+          <h3>Human in the loop</h3>
+          <p>Agents should extend people, not replace their judgement. We keep meaningful control, transparency and reversibility in the hands of the user.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <span class="principle-num">04</span>
+        <div>
+          <h3>Built to last</h3>
+          <p>We favour reliability, observability and honest engineering over shortcuts &mdash; software that behaves predictably long after launch day.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- Contact -->
+  <section class="section" id="contact">
+    <div class="eyebrow">
+      <span class="eyebrow-line" aria-hidden="true"></span>
+      <span class="eyebrow-label">04 &middot; Contact &amp; support</span>
+    </div>
+    <h2 class="section-title">Reach <em>us</em>.</h2>
+
+    <div class="contact-band">
+      <div>
+        <h2>Questions, support or <em>partnership</em>?</h2>
+        <p>
+          We are a small team and we read everything. Whether you have a question about the
+          company, need support, or want to talk about working together, email is the best way
+          to reach us &mdash; we aim to reply within a few business days.
+        </p>
+      </div>
+      <div class="contact-list">
+        <div class="contact-row">
+          <span class="contact-key">General</span>
+          <span class="contact-val"><a href="mailto:hello@appagentic.dev">hello@appagentic.dev</a></span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-key">Support</span>
+          <span class="contact-val"><a href="mailto:support@appagentic.dev">support@appagentic.dev</a></span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-key">Privacy requests</span>
+          <span class="contact-val"><a href="mailto:privacy@appagentic.dev">privacy@appagentic.dev</a></span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-key">Location</span>
+          <span class="contact-val">London, United Kingdom</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- Privacy Policy -->
+  <section class="section" id="privacy">
+    <div class="eyebrow">
+      <span class="eyebrow-line" aria-hidden="true"></span>
+      <span class="eyebrow-label">05 &middot; Privacy policy</span>
+    </div>
+    <h2 class="section-title">Privacy <em>policy</em>.</h2>
+
+    <div class="legal">
+      <p>
+        This policy explains how App Agentic ("App Agentic", "we", "us") handles information in
+        connection with this website. App Agentic is pre-launch and does not currently offer a
+        publicly available product; this policy covers the website only. We will publish a
+        product-specific privacy policy before any product is released.
+      </p>
+
+      <h3>Information we collect</h3>
+      <p>This is a static informational website. We aim to collect as little as possible:</p>
+      <ul>
+        <li><strong>Information you choose to send us.</strong> If you email one of our addresses, we receive your email address, your message and anything you include in it.</li>
+        <li><strong>Basic technical data.</strong> Like most websites, our hosting provider may automatically log standard request data such as IP address, browser type and the pages requested, for security and to keep the site running.</li>
+      </ul>
+      <p>We do not sell personal data, and we do not use this site to build advertising profiles of visitors.</p>
+
+      <h3>Cookies and analytics</h3>
+      <p>
+        This site does not set advertising or tracking cookies. If we add privacy-respecting,
+        aggregate analytics in the future, we will update this policy to describe what is measured.
+      </p>
+
+      <h3>How we use information</h3>
+      <p>We use the limited information above only to respond to your enquiries, to provide support you request, to keep the site secure and operational, and to comply with our legal obligations.</p>
+
+      <h3>Sharing</h3>
+      <p>We share information only with service providers that help us operate this site (such as our hosting and email providers), and where required by law. These providers act on our instructions and are not permitted to use your information for their own purposes.</p>
+
+      <h3>Data retention</h3>
+      <p>We keep correspondence for as long as needed to handle your request and for a reasonable period afterwards, then delete it.</p>
+
+      <h3>Your rights</h3>
+      <p>
+        Depending on where you live, you may have rights to access, correct, or delete the
+        personal information we hold about you, or to object to certain processing. To make a
+        request, email <a href="mailto:privacy@appagentic.dev">privacy@appagentic.dev</a> and we
+        will respond in line with applicable law.
+      </p>
+
+      <h3>Children</h3>
+      <p>This website is intended for a general, adult audience and is not directed at children.</p>
+
+      <h3>Changes</h3>
+      <p>We may update this policy as the company evolves. Material changes will be reflected by updating the date below.</p>
+
+      <p class="legal-updated">Last updated &middot; June 2026</p>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- Terms -->
+  <section class="section" id="terms">
+    <div class="eyebrow">
+      <span class="eyebrow-line" aria-hidden="true"></span>
+      <span class="eyebrow-label">06 &middot; Terms of use</span>
+    </div>
+    <h2 class="section-title">Terms of <em>use</em>.</h2>
+
+    <div class="legal">
+      <p>These terms govern your use of this website. By using the site, you agree to them.</p>
+
+      <h3>Informational purpose</h3>
+      <p>This website is provided for general information about App Agentic. Content describes a pre-launch company and our intended areas of work; it does not constitute an offer, a guarantee of any future product or feature, or professional advice.</p>
+
+      <h3>Intellectual property</h3>
+      <p>The App Agentic name, logo, text and design on this site are owned by App Agentic unless otherwise stated. You may view and share the site, but you may not copy or reuse its branding or content for commercial purposes without our permission.</p>
+
+      <h3>Acceptable use</h3>
+      <p>You agree not to misuse the site, attempt to disrupt it, or use it for any unlawful purpose.</p>
+
+      <h3>No warranty</h3>
+      <p>The site is provided "as is" without warranties of any kind. We do our best to keep it accurate and available but cannot guarantee that it will always be error-free or uninterrupted.</p>
+
+      <h3>Limitation of liability</h3>
+      <p>To the extent permitted by law, App Agentic is not liable for any loss arising from your use of, or inability to use, this website.</p>
+
+      <h3>Contact</h3>
+      <p>Questions about these terms? Email <a href="mailto:hello@appagentic.dev">hello@appagentic.dev</a>.</p>
+
+      <p class="legal-updated">Last updated &middot; June 2026</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="brand" href="#top" aria-label="App Agentic — home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 22 22" fill="none">
+              <circle cx="11" cy="11" r="9.5" stroke="#63dce3" stroke-width="0.4" stroke-dasharray="1 3" opacity="0.5"/>
+              <circle cx="11" cy="11" r="5.5" stroke="#63dce3" stroke-width="0.8" opacity="0.7"/>
+              <circle cx="11" cy="11" r="1.8" fill="#63dce3"/>
+            </svg>
+          </span>
+          <span class="brand-name">App Agentic</span>
+        </a>
+        <p class="footer-tag">A software studio building AI-native applications and the agent infrastructure that runs them. London, UK.</p>
+      </div>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#about">About</a>
+          <a href="#work">What we build</a>
+          <a href="#approach">Approach</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="mailto:hello@appagentic.dev">General</a>
+          <a href="mailto:support@appagentic.dev">Support</a>
+          <a href="mailto:privacy@appagentic.dev">Privacy</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="#privacy">Privacy policy</a>
+          <a href="#terms">Terms of use</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 App Agentic</span>
+      <span>London &middot; United Kingdom</span>
+    </div>
   </footer>
 
   <script>
-    // Particles — subtle, slow
-    (function() {
+    // Decorative particle field — purely cosmetic, page is fully readable without it.
+    (function () {
       const container = document.getElementById('particles');
-      const count = 22;
+      if (!container) return;
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+      const count = 18;
       for (let i = 0; i < count; i++) {
         const p = document.createElement('div');
         p.className = 'particle';
-        p.style.left  = Math.random() * 100 + '%';
-        p.style.top   = Math.random() * 100 + '%';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.top = Math.random() * 100 + '%';
         const size = 1 + Math.random() * 1.3;
-        p.style.width  = size + 'px';
+        p.style.width = size + 'px';
         p.style.height = size + 'px';
-        p.style.animationDuration = (22 + Math.random() * 26) + 's';
-        p.style.animationDelay    = (Math.random() * 22) + 's';
+        p.style.animationDuration = (24 + Math.random() * 26) + 's';
+        p.style.animationDelay = (Math.random() * 24) + 's';
         container.appendChild(p);
       }
-    })();
-
-    // Kinetic marquee content — build twice for seamless loop
-    (function() {
-      const track = document.getElementById('marquee-track');
-      const items = [
-        ['Uptime',      '99.82%'],
-        ['Agents',      '0047 online'],
-        ['Latency',     '18ms p50'],
-        ['Runtime',     'v0.1.3-rc'],
-        ['Region',      'lon · sfo · tyo'],
-        ['Build',       '#2f4e9c'],
-        ['Heartbeat',   'stable'],
-        ['Protocol',    'MCP / A2A'],
-      ];
-      const html = items.map(([k, v]) =>
-        '<span class="marquee-item">' + k + ' <span class="val">' + v + '</span></span>'
-      ).join('');
-      track.innerHTML = html + html;
     })();
   </script>
 </body>

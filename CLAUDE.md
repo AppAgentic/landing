@@ -1,57 +1,79 @@
 # App Agentic Landing Page
 
 ## Overview
-Minimal, mysterious pre-launch landing page for App Agentic. Dark, techy, premium aesthetic (Apple-meets-cyberpunk). Pure static site with no dependencies or build step.
+Public company website for App Agentic, a pre-launch software studio. Dark, premium, technical aesthetic (Apple-meets-cyberpunk). Pure static site, no dependencies or build step.
+
+It was expanded from a single-screen "teaser" into a full, scrollable multi-section site after Apple **withdrew a Developer Program enrollment for "minimal content."** The page now provides the public substance Apple expects: a clear company/product explanation, concrete areas of work, contact/support paths, and a privacy policy + terms of use. **Do not regress it back to a one-liner teaser** — keep the substantive content sections.
 
 ## Tech Stack
 - **HTML/CSS/vanilla JS** -- zero dependencies
 - No framework, no npm, no build tools
-- Single `index.html` file contains everything (styles inline, JS inline)
+- Single `index.html` file contains everything (styles inline in `<style>`, one small JS block inline)
 
 ## File Structure
 ```
 Landing/
-  index.html      # The entire landing page (HTML + CSS + JS)
+  index.html      # The entire site (HTML + CSS + JS)
   CLAUDE.md       # This file
   .gitignore      # Standard Node gitignore (from repo init)
 ```
 
-## Design Tokens
+## Page Structure (sections, all anchor-linked from the nav)
+1. **Hero** (`#top`) — headline "Software for the agentic era", one-paragraph explanation, CTAs, orbital agent graph.
+2. **About** (`#about`) — who we are, what AI-native means, pre-launch status. Sidebar of company facts (HQ, founded, status, contact).
+3. **What we build** (`#work`) — 4 cards: agent-native apps, mobile experiences, agent infrastructure, applied research. Framed as *areas of work*, not shipped products.
+4. **Approach** (`#approach`) — 4 principles (design first, privacy by default, human in the loop, built to last).
+5. **Contact & support** (`#contact`) — mailto links for general / support / privacy, plus location.
+6. **Privacy policy** (`#privacy`) — website privacy policy (data collected, cookies, rights, retention).
+7. **Terms of use** (`#terms`) — informational-site terms.
+8. **Footer** — brand, company/contact/legal link columns, copyright.
+
+## Content Truthfulness Rules (important)
+- The company is **pre-launch** — never claim live products, customers, funding, or metrics.
+- The previous version contained **fabricated metrics** (uptime %, "agents online", latency, version numbers, marquee). These were removed because they are misleading and were a likely factor in the App Store rejection. **Do not reintroduce fake telemetry.**
+- Keep claims to verifiable, generic descriptions of intent ("we are building…", "areas of work").
+
+## Design Tokens (CSS custom properties in `:root`)
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--bg` | `#0a0a0a` | Page background |
-| `--surface` | `#111111` | Input/card backgrounds |
-| `--border` | `#1a1a1a` | Subtle borders |
-| `--text` | `#e0e0e0` | Primary text |
-| `--text-dim` | `#555555` | Secondary text, brand name |
-| `--accent` | `#4fffff` | CTA button, shimmer highlight, particles |
+| `--bg` | `#0a0a0c` | Page background |
+| `--bg-elev` | `#111114` | Card hover, elevated surfaces |
+| `--border` / `--border-mid` | white @ 6% / 12% | Hairlines, card borders |
+| `--text` / `--text-mid` / `--text-dim` | `#e8e8ed` / `#9a9aa5` / `#62626b` | Text hierarchy |
+| `--accent` | `#63dce3` | CTA, shimmer, particles, links |
+| `--warn` | `#f4c47a` | Amber accent node |
+| `--maxw` | `1180px` | Content max width |
+| `--pad-x` | `clamp(1.25rem, 5vw, 5rem)` | Horizontal gutters |
 
-## Animated Elements
-1. **Shimmer text** -- hero headline cycles a cyan highlight across the text via `background-position` animation
-2. **Ambient orbs** -- three large blurred gradient circles drift and pulse behind the content
-3. **Particles** -- 30 small dots float upward at varying speeds (pure CSS animation, JS-generated elements)
-4. **Hero glow** -- radial gradient behind the headline pulses in and out
+## Fonts (Google Fonts)
+- `Geist` (sans, body/headings), `Geist Mono` (labels, nav, mono UI), `Instrument Serif` (italic accent words in headings).
+
+## Animated / Decorative Elements
+- **Shimmer** on the serif accent word in the hero headline.
+- **Ambient orbs** — 3 blurred gradient circles, `position: fixed`, drift behind content.
+- **Particles** — JS-generated cosmetic dots (`#particles`), skipped under `prefers-reduced-motion`. Page is fully readable without JS.
+- **Orbital graph** — SVG with rotating orbits + pulsing nodes (decorative, `aria-hidden`).
+- **Scan line** in eyebrow labels and chapter markers.
+- Hero copy uses fade-up entrance animations that **end in the visible state** (`forwards`), so content is never permanently hidden.
+
+## Accessibility / No-JS / Apple-review constraints
+- All substantive content is in normal document flow and visible **without JavaScript** and **without scroll-triggered reveals** (no IntersectionObserver). This was deliberate so a reviewer (or crawler) sees full content immediately.
+- `prefers-reduced-motion` disables animations and smooth scroll.
+- Decorative SVGs/layers are `aria-hidden`.
 
 ## Responsive Behavior
-- Hero text uses `clamp(2.2rem, 6vw, 3.8rem)` for fluid scaling
-- On mobile (<480px), the signup form stacks vertically (email input above button)
-- Content max-width is 680px, centered
+- Hero is a 2-col grid that collapses to 1 col below 900px (graph moves above copy).
+- Card/principle grids collapse to single column below 900px.
+- Nav section links hide below 860px; brand + "Contact" CTA always remain.
 
-## Email Form
-- Client-side only -- no backend wired up
-- On valid email submission, the form transitions to a "You're on the list" confirmation state
-- To connect a backend: intercept the button click handler in the inline `<script>` and POST to your endpoint
-
-## Font
-- Uses Google Fonts `Inter` with system font fallback stack
-- Weights loaded: 300 (hero), 400 (tagline), 500 (brand), 600 (CTA button)
-
-## Favicon
-- Inline SVG data URI in the `<link rel="icon">` tag -- a minimal concentric circle mark in cyan on dark
+## Assumptions to verify before launch
+- **Email domain `appagentic.dev`** (hello@ / support@ / privacy@) is assumed from the AppAgentic browser-profile email. Confirm these mailboxes exist / forward, or swap to the real support address.
+- **Company name** rendered as "App Agentic" (no legal entity suffix like Ltd). Add the registered entity name + company number/address if one exists — Apple looks favourably on a verifiable legal entity.
+- **Location** stated as "London, United Kingdom" (carried over from the original page's LON coordinates). Update if HQ differs.
+- **Founded 2026** — adjust if incorrect.
 
 ## Deployment
-- Any static host works: GitHub Pages, Netlify, Vercel, Cloudflare Pages, S3+CloudFront
-- No build step needed -- just serve the directory
+- Any static host: GitHub Pages, Netlify, Vercel, Cloudflare Pages, S3+CloudFront. No build step.
 
 ## Git
 - Remote: `https://github.com/AppAgentic/landing.git`
