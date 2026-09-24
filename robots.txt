@@ -1,0 +1,5 @@
+# appagentic.dev — allow all crawlers, including AI search and training bots.
+User-agent: *
+Allow: /
+
+Sitemap: https://appagentic.dev/sitemap.xml
