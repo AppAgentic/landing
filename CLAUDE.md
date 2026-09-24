@@ -1,7 +1,7 @@
 # App Agentic Landing Page
 
 ## Overview
-Public company website for App Agentic, a pre-launch software studio. Dark, premium, technical aesthetic (Apple-meets-cyberpunk). Pure static site, no dependencies or build step.
+Public company website for App Agentic (legal name App Agentic Ltd), a software studio with live products. Dark, premium, technical aesthetic (Apple-meets-cyberpunk). Pure static site, no dependencies or build step.
 
 It was expanded from a single-screen "teaser" into a full, scrollable multi-section site after Apple **withdrew a Developer Program enrollment for "minimal content."** The page now provides the public substance Apple expects: a clear company/product explanation, concrete areas of work, contact/support paths, and a privacy policy + terms of use. **Do not regress it back to a one-liner teaser** — keep the substantive content sections.
 
@@ -23,12 +23,13 @@ Landing/
 
 ## Page Structure (sections, all anchor-linked from the nav)
 1. **Hero** (`#top`) — headline "Software for the agentic era", one-paragraph explanation, CTAs, orbital agent graph.
-2. **About** (`#about`) — who we are, what AI-native means, pre-launch status. Sidebar of company facts (HQ, founded, status, contact).
-3. **What we build** (`#work`) — 4 cards: agent-native apps, mobile experiences, agent infrastructure, applied research. Framed as *areas of work*, not shipped products.
-4. **Approach** (`#approach`) — 4 principles (design first, privacy by default, human in the loop, built to last).
-5. **Contact & support** (`#contact`) — mailto links for general / support / privacy, plus location.
-6. **Legal** (`#legal`) — concise directory linking to the standalone legal pages.
-7. **Footer** — brand, company/contact/legal link columns, copyright.
+2. **About** (`#about`) — who we are, what AI-native means, current status. Sidebar of company facts (company App Agentic Ltd, HQ, founded, status, contact).
+3. **Products** (`#products`) — cards linking to live App Agentic products: ClipSubtitles, SlideTok, SeedViral, App Listing Agent, AppRefer, MuseAIConnectors. Descriptions mirror each product's own homepage meta description.
+4. **What we build** (`#work`) — 4 cards: areas of work (agent-native apps, mobile, agent infrastructure, applied research).
+5. **Approach** (`#approach`) — 4 principles (design first, privacy by default, human in the loop, built to last).
+6. **Contact & support** (`#contact`) — mailto links for general / support / privacy, plus location.
+7. **Legal** (`#legal`) — concise directory linking to the standalone legal pages.
+8. **Footer** — brand, company/contact/legal link columns, copyright.
 
 ## Legal Pages
 - `privacy.html` is the standalone website privacy policy (data collected, cookies, rights, retention).
@@ -36,9 +37,11 @@ Landing/
 - Keep legal documents on their own pages. Apple specifically questioned site substance/minimal content, and standalone legal URLs make the public website easier to review and reference.
 
 ## Content Truthfulness Rules (important)
-- The company is **pre-launch** — never claim live products, customers, funding, or metrics.
+- Status (updated 2026-09-24): App Agentic has **live products** (see `#products`). Only list a product after confirming the repo is in the AppAgentic GitHub org, the site is live, and its legal pages don't name a different entity or conflict with a UK company. StoryCrest is deliberately left out: its terms choose US governing law (pending Joe).
+- Never claim customers, funding, user counts or other metrics.
 - The previous version contained **fabricated metrics** (uptime %, "agents online", latency, version numbers, marquee). These were removed because they are misleading and were a likely factor in the App Store rejection. **Do not reintroduce fake telemetry.**
-- Keep claims to verifiable, generic descriptions of intent ("we are building…", "areas of work").
+- Keep claims verifiable. Product descriptions come from each product's own live homepage.
+- Legal name is **App Agentic Ltd** (same as SeedViral's `LEGAL_NAME`). Never publish the registered address or company number (Joe, 2026-09-14). "Manchester, United Kingdom" is the public location.
 
 ## Design Tokens (CSS custom properties in `:root`)
 | Token | Value | Usage |
@@ -85,3 +88,10 @@ Landing/
 ## Git
 - Remote: `https://github.com/AppAgentic/landing.git`
 - Branch: `main`
+
+## SEO (added 2026-09-24)
+- GitHub Pages serves `main` at `https://appagentic.dev` (www 301s to apex). Merging to `main` publishes immediately.
+- `robots.txt` (allow all) and a static `sitemap.xml`. `lastmod` is the date each page's content last changed: update it only when you edit that page.
+- Every page has a self-canonical (`https://appagentic.dev/`, `/privacy.html`, `/terms.html`), OG/Twitter tags and `og-image.png` (1200x630).
+- `index.html` `<head>` has Organization JSON-LD (legalName App Agentic Ltd, locality only, `sameAs` = the GitHub org, the only confirmed profile), WebSite, and an ItemList of the products. Keep the ItemList in sync with the visible Products section.
+- Add no `sameAs` profile you haven't confirmed exists and is ours. LinkedIn, X and Crunchbase were unconfirmed as of 2026-09-24.
