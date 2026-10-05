@@ -32,7 +32,7 @@
         "legalName": "App Agentic Ltd",
         "url": "https://appagentic.dev/",
         "email": "hello@appagentic.dev",
-        "foundingDate": "2026",
+        "foundingDate": "2025-05-05",
         "address": { "@type": "PostalAddress", "addressLocality": "Manchester", "addressCountry": "GB" },
         "sameAs": ["https://github.com/AppAgentic"]
       },
@@ -52,7 +52,8 @@
           { "@type": "ListItem", "position": 3, "name": "SeedViral", "url": "https://seedviral.com/" },
           { "@type": "ListItem", "position": 4, "name": "App Listing Agent", "url": "https://applistingagent.com/" },
           { "@type": "ListItem", "position": 5, "name": "AppRefer", "url": "https://apprefer.com/" },
-          { "@type": "ListItem", "position": 6, "name": "MuseAIConnectors", "url": "https://museaiconnectors.com/" }
+          { "@type": "ListItem", "position": 6, "name": "MuseAIConnectors", "url": "https://museaiconnectors.com/" },
+          { "@type": "ListItem", "position": 7, "name": "StoryCrest", "url": "https://storycrestbooks.com/" }
         ]
       }
     ]
@@ -545,6 +546,11 @@
     }
     .grid--3 { grid-template-columns: repeat(3, 1fr); }
     .grid--2 { grid-template-columns: repeat(2, 1fr); }
+    /* Fill the empty cells after an orphan last card so the grid background doesn't show. */
+    @media (min-width: 901px) {
+      .grid--3:has(> :last-child:nth-child(3n+1))::after { content: ""; grid-column: span 2; background: var(--bg); }
+      .grid--3:has(> :last-child:nth-child(3n+2))::after { content: ""; background: var(--bg); }
+    }
 
     .card {
       background: var(--bg);
@@ -949,7 +955,7 @@
         </div>
         <div>
           <div class="fact-label">Founded</div>
-          <div class="fact-value">2026</div>
+          <div class="fact-value">2025</div>
         </div>
         <div>
           <div class="fact-label">Status</div>
@@ -1052,6 +1058,15 @@
           assistant. Not affiliated with Meta.
         </p>
         <span class="product-domain">museaiconnectors.com</span>
+      </a>
+      <a class="card product-card" href="https://storycrestbooks.com/">
+        <span class="card-index">P&middot;07</span>
+        <h3 class="card-title">StoryCrest</h3>
+        <p class="card-body">
+          Personalised illustrated children&rsquo;s books where your child is the hero, as a
+          printed hardcover, ebook and audio book.
+        </p>
+        <span class="product-domain">storycrestbooks.com</span>
       </a>
     </div>
   </section>
@@ -1187,6 +1202,10 @@
         <div class="contact-row">
           <span class="contact-key">Privacy requests</span>
           <span class="contact-val"><a href="mailto:privacy@appagentic.dev">privacy@appagentic.dev</a></span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-key">Security</span>
+          <span class="contact-val"><a href="mailto:security@appagentic.dev">security@appagentic.dev</a></span>
         </div>
         <div class="contact-row">
           <span class="contact-key">Location</span>
