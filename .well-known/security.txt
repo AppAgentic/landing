@@ -1,0 +1,4 @@
+Contact: mailto:security@appagentic.dev
+Expires: 2027-10-05T00:00:00Z
+Preferred-Languages: en
+Canonical: https://appagentic.dev/.well-known/security.txt
